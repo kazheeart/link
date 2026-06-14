@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دریافت فایل</title>
+    <style>
+        body { 
+            font-family: Tahoma, sans-serif; 
+            background: #121212;
+            color: #ffffff;
+            display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;
+        }
+        .container {
+            background: #1e1e1e;
+            padding: 40px 30px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 350px;
+            width: 90%;
+        }
+        h3 { margin-top: 0; color: #f1f1f1; }
+        p { color: #aaaaaa; font-size: 14px; margin-bottom: 30px; line-height: 1.6; }
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 15px 0;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn.unlocked { background: #00c853; box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4); }
+        #error-msg { display: none; color: #ff5252; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainBox">
+        <h3>قفل فایل</h3>
+        <p>برای باز شدن لینک دانلود، روی دکمه زیر کلیک کنید و پیج را فالو کنید.</p>
+        <a href="#" id="actionBtn" class="btn" target="_blank">فالو کردن پیج</a>
+    </div>
+    <h3 id="error-msg">لینک نامعتبر است!</h3>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const data = urlParams.get('data');
+        let isUnlocked = false;
+
+        if(data) {
+            try {
+                let decoded = atob(data);
+                let links = decoded.split("|||");
+                let btn = document.getElementById('actionBtn');
+                btn.href = links[0]; // لینک پیج
+
+                btn.addEventListener('click', function() {
+                    window.addEventListener('focus', function unlockFile() {
+                        if(!isUnlocked) {
+                            isUnlocked = true;
+                            btn.innerHTML = 'دریافت فایل';
+                            btn.href = links[1]; // لینک فایل
+                            btn.classList.add('unlocked');
+                            window.removeEventListener('focus', unlockFile);
+                        }
+                    });
+                });
+            } catch(e) {
+                document.getElementById('mainBox').style.display = 'none';
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        } else {
+            document.getElementById('mainBox').style.display = 'none';
+            document.getElementById('error-msg').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
