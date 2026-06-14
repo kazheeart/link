@@ -114,14 +114,21 @@
                     if(timeAway >= 1500 && timeAway < 3500) { 
                         errorMsg.style.opacity = '1'; actionBtn.classList.remove('disabled'); btnSpinner.style.display = 'none'; btnText.innerText = 'تلاش مجدد'; return;
                     }
+                    
                     isUnlocked = true;
-                    btnText.innerText = 'در حال بررسی... (2)';
-                    setTimeout(() => { btnText.innerText = 'در حال بررسی... (1)'; }, 1000);
-                    setTimeout(() => {
-                        mainBox.classList.add('unlocked'); btnSpinner.style.display = 'none';
-                        document.getElementById('statusTitle').innerText = 'قفل باز شد!';
-                        actionBtn.classList.remove('disabled'); actionBtn.classList.add('unlocked-btn'); btnText.innerText = 'دانلود فایل';
-                    }, 2000);
+                    let countdown = 5; // تایمر ۵ ثانیه‌ای
+                    btnSpinner.style.display = 'block';
+                    
+                    let timerInterval = setInterval(() => {
+                        btnText.innerText = `در حال بررسی... (${countdown})`;
+                        countdown--;
+                        if(countdown < 0) {
+                            clearInterval(timerInterval);
+                            mainBox.classList.add('unlocked'); btnSpinner.style.display = 'none';
+                            document.getElementById('statusTitle').innerText = 'قفل باز شد!';
+                            actionBtn.classList.remove('disabled'); actionBtn.classList.add('unlocked-btn'); btnText.innerText = 'دانلود فایل';
+                        }
+                    }, 1000);
                 });
             } catch(e) { document.getElementById('fatal-error').style.display = 'block'; }
         };
