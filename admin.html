@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تولید لینک قفل‌دار</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 400px; }
+        input { width: 95%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; text-align: left; direction: ltr; }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        button:hover { background: #0056b3; }
+        textarea { width: 95%; padding: 10px; margin-top: 15px; border-radius: 6px; border: 1px solid #ccc; height: 80px; text-align: left; direction: ltr; resize: none; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2 style="text-align: center; margin-top:0;">پنل ساخت لینک</h2>
+        <label>لینک پیج اینستاگرام:</label>
+        <input type="text" id="pageLink" placeholder="https://instagram.com/yourpage">
+        
+        <label>لینک فایل برای دانلود:</label>
+        <input type="text" id="fileLink" placeholder="https://yourdrive.com/file.zip">
+        
+        <label>یوزرنیم گیت‌هاب شما:</label>
+        <input type="text" id="gitUser" placeholder="مثال: kazheart">
+
+        <label>اسم مخزن گیت‌هاب شما:</label>
+        <input type="text" id="gitRepo" placeholder="مثال: link">
+
+        <button onclick="generateLink()">ساخت لینک نهایی</button>
+        
+        <textarea id="resultLink" readonly placeholder="لینک نهایی اینجا نمایش داده می‌شود..."></textarea>
+    </div>
+
+    <script>
+        function generateLink() {
+            let page = document.getElementById('pageLink').value.trim();
+            let file = document.getElementById('fileLink').value.trim();
+            let user = document.getElementById('gitUser').value.trim();
+            let repo = document.getElementById('gitRepo').value.trim();
+
+            if(!page || !file || !user || !repo) { 
+                alert("لطفا تمام کادرها را پر کنید."); 
+                return; 
+            }
+            
+            let combined = page + "|||" + file;
+            let encoded = btoa(combined); 
+            
+            // ساخت اتوماتیک آدرس گیت‌هاب شما
+            let mySiteUrl = `https://${user}.github.io/${repo}/`; 
+            
+            document.getElementById('resultLink').value = mySiteUrl + "?data=" + encoded;
+        }
+    </script>
+</body>
+</html>
