@@ -6,40 +6,12 @@
     <title>دریافت فایل اختصاصی</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v3.3.0/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
-        /* متغیرهای رنگی برای حالت روز و شب */
-        :root {
-            --bg-color: #f8fafc;
-            --text-main: #1e293b;
-            --text-sub: #64748b;
-            --card-bg: rgba(255, 255, 255, 0.75);
-            --card-border: rgba(255, 255, 255, 0.9);
-            --card-shadow: rgba(109, 40, 217, 0.1);
-            --gallery-bg: rgba(255, 255, 255, 0.6);
-            --gallery-border: rgba(255, 255, 255, 0.8);
-            --toast-bg: rgba(239, 68, 68, 0.05);
-        }
-
-        [data-theme="dark"] {
-            --bg-color: #0f172a;
-            --text-main: #f8fafc;
-            --text-sub: #94a3b8;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --card-border: rgba(51, 65, 85, 0.5);
-            --card-shadow: rgba(0, 0, 0, 0.3);
-            --gallery-bg: rgba(30, 41, 59, 0.5);
-            --gallery-border: rgba(51, 65, 85, 0.4);
-            --toast-bg: rgba(239, 68, 68, 0.15);
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+        :root { --bg-color: #f8fafc; --text-main: #1e293b; --text-sub: #64748b; --card-bg: rgba(255, 255, 255, 0.75); --card-border: rgba(255, 255, 255, 0.9); --card-shadow: rgba(109, 40, 217, 0.1); --gallery-bg: rgba(255, 255, 255, 0.6); --gallery-border: rgba(255, 255, 255, 0.8); --toast-bg: rgba(239, 68, 68, 0.05); }
+        [data-theme="dark"] { --bg-color: #0f172a; --text-main: #f8fafc; --text-sub: #94a3b8; --card-bg: rgba(30, 41, 59, 0.7); --card-border: rgba(51, 65, 85, 0.5); --card-shadow: rgba(0, 0, 0, 0.3); --gallery-bg: rgba(30, 41, 59, 0.5); --gallery-border: rgba(51, 65, 85, 0.4); --toast-bg: rgba(239, 68, 68, 0.15); }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; transition: background-color 0.3s, color 0.3s; }
         body { background-color: var(--bg-color); color: var(--text-main); display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; padding: 40px 15px; }
         
-        /* دکمه سوییچ تم */
-        .theme-toggle {
-            position: absolute; top: 20px; left: 20px; background: var(--card-bg); border: 1px solid var(--card-border);
-            width: 44px; height: 44px; border-radius: 12px; display: flex; justify-content: center; align-items: center;
-            cursor: pointer; box-shadow: 0 4px 12px var(--card-shadow); z-index: 100;
-        }
+        .theme-toggle { position: absolute; top: 20px; left: 20px; background: var(--card-bg); border: 1px solid var(--card-border); width: 44px; height: 44px; border-radius: 12px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 12px var(--card-shadow); z-index: 100; }
         .theme-toggle svg { width: 20px; height: 20px; fill: var(--text-main); }
 
         .bg-shape { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; animation: float 12s infinite alternate ease-in-out; }
@@ -47,16 +19,16 @@
         .shape2 { width: 400px; height: 400px; background: rgba(196, 181, 253, 0.25); bottom: -10%; right: -10%; animation-delay: -6s; }
         @keyframes float { 0% { transform: translateY(0px) scale(1); } 100% { transform: translateY(40px) scale(1.1); } }
 
-        .card { background: var(--card-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--card-border); border-radius: 28px; padding: 45px 30px; text-align: center; box-shadow: 0 20px 50px -10px var(--card-shadow); width: 100%; max-width: 400px; position: relative; z-index: 10; }
+        .card { background: var(--card-bg); backdrop-filter: blur(24px); border: 1px solid var(--card-border); border-radius: 28px; padding: 45px 30px; text-align: center; box-shadow: 0 20px 50px -10px var(--card-shadow); width: 100%; max-width: 400px; position: relative; z-index: 10; }
         .icon-box { width: 75px; height: 75px; margin: 0 auto 25px; border-radius: 50%; background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(109, 40, 217, 0.05)); display: flex; justify-content: center; align-items: center; border: 1px solid rgba(139, 92, 246, 0.2); }
         .icon-box svg { width: 34px; height: 34px; fill: #8b5cf6; }
         
         h2 { font-size: 22px; font-weight: 800; margin-bottom: 12px; }
         p.subtitle { color: var(--text-sub); font-size: 14.5px; margin-bottom: 30px; line-height: 1.8; }
         
-        .btn { display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; padding: 18px 0; background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); color: white; border-radius: 16px; font-weight: 700; font-size: 16px; cursor: pointer; border: none; box-shadow: 0 10px 20px rgba(126, 34, 206, 0.2); }
+        .btn { display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; padding: 18px 0; background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); color: white; border-radius: 16px; font-weight: 700; font-size: 16px; cursor: pointer; border: none; box-shadow: 0 10px 20px rgba(126, 34, 206, 0.2); transition: all 0.3s ease; }
         .btn.disabled { opacity: 0.85; pointer-events: none; }
-        .btn.unlocked-btn { background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
+        .btn.unlocked-btn { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
 
         .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 0.8s linear infinite; display: none; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -64,16 +36,13 @@
         #error-msg { color: #ef4444; font-size: 13.5px; margin-top: 20px; font-weight: 600; min-height: 20px; opacity: 0; background: var(--toast-bg); padding: 10px; border-radius: 8px; transition: opacity 0.3s; }
         #fatal-error { display: none; color: #ef4444; font-weight: bold; text-align: center; background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid var(--card-border); }
 
-        /* استایل شمارشگر دانلود موفق (Social Proof) */
         .download-counter { font-size: 13px; color: var(--text-sub); margin-top: 15px; display: flex; justify-content: center; align-items: center; gap: 6px; font-weight: 600; }
         .download-counter svg { width: 15px; height: 15px; fill: #10b981; }
 
-        /* استایل دکمه گزارش مشکل و کپی‌رایت */
         .footer-tools { display: flex; flex-direction: column; align-items: center; margin-top: 30px; gap: 10px; z-index: 10; }
         .report-btn { font-size: 13px; color: var(--text-sub); text-decoration: none; display: flex; align-items: center; gap: 5px; font-weight: 600; padding: 6px 12px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; }
         .report-btn:hover { color: #ef4444; }
-        .report-btn svg { width: 14px; height: 14px; fill: currentColor; }
-
+        
         .gallery-container { width: 100%; max-width: 400px; margin-top: 40px; z-index: 10; display: none; }
         .gallery-title { font-size: 18px; font-weight: 800; color: var(--text-main); margin-bottom: 20px; text-align: center; }
         .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
@@ -85,7 +54,7 @@
 <body>
 
     <button class="theme-toggle" id="themeToggle" title="تغییر ظاهر">
-        <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M223.5 32C116 43.7 32 135 32 245.8 32 358.4 118.6 448 228 448c54 0 107-21.6 146.7-60.9 7-7 2-18.8-7.8-18.8-15.1 0-30.1-1.3-44.8-3.9-92.3-16.5-164.1-91.1-177.6-184.3-5.2-35.7.5-71.2 15.6-103 4.1-8.5-.5-18.7-9.7-18.7H223.5z"/></button>
+        <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M223.5 32C116 43.7 32 135 32 245.8 32 358.4 118.6 448 228 448c54 0 107-21.6 146.7-60.9 7-7 2-18.8-7.8-18.8-15.1 0-30.1-1.3-44.8-3.9-92.3-16.5-164.1-91.1-177.6-184.3-5.2-35.7.5-71.2 15.6-103 4.1-8.5-.5-18.7-9.7-18.7H223.5z"/></svg>
     </button>
 
     <div class="bg-shape shape1"></div>
@@ -98,25 +67,19 @@
         </div>
         <h2 id="statusTitle">فایل قفل است</h2>
         <p class="subtitle" id="statusDesc">برای دسترسی، ابتدا پیج را فالو کنید.</p>
-        
         <button id="actionBtn" class="btn">
             <div class="spinner" id="btnSpinner"></div>
             <span id="btnText">فالو کردن پیج</span>
         </button>
-        
         <div class="download-counter">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
-            <span id="counterText">تا این لحظه ۲۴۰ نفر دانلود کرده‌اند</span>
+            <span id="counterText"></span>
         </div>
-
         <div id="error-msg">تلاش مجدد (سریع برگشتید!)</div>
     </div>
 
     <div class="footer-tools" id="footerTools" style="display: none;">
-        <a href="https://t.me/Kazheeart1" target="_blank" class="report-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 32c12.3 0 24.2 1.1 35.7 3.2c11.7 2.2 23 6.1 33.5 11.4c10.4 5.3 19.8 12.2 27.6 20c7.8 7.8 14.7 17.2 20 27.6c5.3 10.5 9.2 21.8 11.4 33.5c2.1 11.5 3.2 23.4 3.2 35.7c0 48.4-17.2 92.8-45.6 127.3l21.3 21.3c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-21.3-21.3C348.8 350.8 304.4 368 256 368c-12.3 0-24.2-1.1-35.7-3.2c-11.7-2.2-23-6.1-33.5-11.4c-10.4-5.3-19.8-12.2-27.6-20c-7.8-7.8-14.7-17.2-20-27.6c-5.3-10.5-9.2-21.8-11.4-33.5C115.1 260.8 114 248.9 114 236c0-48.4 17.2-92.8 45.6-127.3L138.3 87.3c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l21.3 21.3C223.2 49.2 267.6 32 256 32z"/></svg>
-            گزارش خرابی لینک
-        </a>
+        <a href="https://t.me/Kazhe_Art" target="_blank" class="report-btn">گزارش خرابی لینک</a>
     </div>
 
     <div class="gallery-container" id="galleryContainer">
@@ -127,33 +90,26 @@
     <script src="posts.js"></script>
 
     <script>
-        // ۱. سیستم هوشمند کنترل حالت شب و روز
+        // ۱. مدیریت تم
         const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
-        
-        // چک کردن ترجیح قبلی کاربر
-        if (localStorage.getItem('theme') === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            themeIcon.innerHTML = '<path d="M256 160c-52.9 0-96 43.1-96 96s43.1 96 96 96 96-43.1 96-96-43.1-96-96-96zm246.4 70.5l-53.3-53.3c-3.1-3.1-4.7-7.2-4.7-11.3V90.3c0-17.7-14.3-32-32-32H337.1c-4.1 0-8.2-1.6-11.3-4.7l-53.3-53.3c-12.5-12.5-32.8-12.5-45.3 0l-53.3 53.3c-3.1 3.1-7.2 4.7-11.3 4.7H90.3c-17.7 0-32 14.3-32 32v75.5c0 4.1-1.6 8.2-4.7 11.3L3.6 226.5c-12.5 12.5-12.5 32.8 0 45.3l53.3 53.3c3.1 3.1 4.7 7.2 4.7 11.3v75.5c0 17.7 14.3 32 32 32h75.5c4.1 0 8.2 1.6 11.3 4.7l53.3 53.3c12.5 12.5 32.8 12.5 45.3 0l53.3-53.3c3.1-3.1 7.2-4.7 11.3-4.7h75.5c17.7 0 32-14.3 32-32v-75.5c0-4.1 1.6-8.2 4.7-11.3l53.3-53.3c12.5-12.5 12.5-32.8 0-45.3z"/>';
-        }
-
+        if (localStorage.getItem('theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
         themeToggle.addEventListener('click', () => {
-            let currentTheme = document.documentElement.getAttribute('data-theme');
-            if (currentTheme === 'dark') {
-                document.documentElement.removeAttribute('data-theme');
-                localStorage.setItem('theme', 'light');
-                themeIcon.innerHTML = '<path d="M223.5 32C116 43.7 32 135 32 245.8 32 358.4 118.6 448 228 448c54 0 107-21.6 146.7-60.9 7-7 2-18.8-7.8-18.8-15.1 0-30.1-1.3-44.8-3.9-92.3-16.5-164.1-91.1-177.6-184.3-5.2-35.7.5-71.2 15.6-103 4.1-8.5-.5-18.7-9.7-18.7H223.5z"/>';
-            } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-                themeIcon.innerHTML = '<path d="M256 160c-52.9 0-96 43.1-96 96s43.1 96 96 96 96-43.1 96-96-43.1-96-96-96zm246.4 70.5l-53.3-53.3c-3.1-3.1-4.7-7.2-4.7-11.3V90.3c0-17.7-14.3-32-32-32H337.1c-4.1 0-8.2-1.6-11.3-4.7l-53.3-53.3c-12.5-12.5-32.8-12.5-45.3 0l-53.3 53.3c-3.1 3.1-7.2 4.7-11.3 4.7H90.3c-17.7 0-32 14.3-32 32v75.5c0 4.1-1.6 8.2-4.7 11.3L3.6 226.5c-12.5 12.5-12.5 32.8 0 45.3l53.3 53.3c3.1 3.1 4.7 7.2 4.7 11.3v75.5c0 17.7 14.3 32 32 32h75.5c4.1 0 8.2 1.6 11.3 4.7l53.3 53.3c12.5 12.5 32.8 12.5 45.3 0l53.3-53.3c3.1-3.1 7.2-4.7 11.3-4.7h75.5c17.7 0 32-14.3 32-32v-75.5c0-4.1 1.6-8.2 4.7-11.3l53.3-53.3c12.5-12.5 12.5-32.8 0-45.3z"/>';
-            }
+            let isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('theme', 'light'); }
+            else { document.documentElement.setAttribute('data-theme', 'dark'); localStorage.setItem('theme', 'dark'); }
         });
 
-        // ۲. ساخت رندومِ شمارشگر دانلود (Social Proof)
-        const minDl = 280, maxDl = 490;
-        const randomCount = Math.floor(Math.random() * (maxDl - minDl + 1)) + minDl;
-        document.getElementById('counterText').innerText = `تا این لحظه ${randomCount} نفر این فایل را دریافت کرده‌اند`;
+        // ۲. سیستم شمارشگر هوشمند (فقط هر 1 دقیقه یکبار افزایش)
+        let dlCount = parseInt(localStorage.getItem('dl_count')) || 280;
+        let lastUpdate = parseInt(localStorage.getItem('last_update_time')) || 0;
+        let now = Date.now();
+        // اگر بیشتر از 60 ثانیه گذشته بود، مقدار رو افزایش بده
+        if (now - lastUpdate > 60000) {
+            dlCount += Math.floor(Math.random() * 2) + 1; // اضافه شدن تصادفی 1 یا 2 واحد
+            localStorage.setItem('dl_count', dlCount);
+            localStorage.setItem('last_update_time', now);
+        }
+        document.getElementById('counterText').innerText = `تا این لحظه ${dlCount} نفر این فایل را دریافت کرده‌اند`;
 
         window.onload = function() {
             if (window.myPosts && window.myPosts.length > 0) {
@@ -182,7 +138,6 @@
                 let fileUrl = links[1].trim();
                 if(pageUrl && !pageUrl.startsWith('http')) pageUrl = 'https://' + pageUrl;
                 if(fileUrl && !fileUrl.startsWith('http')) fileUrl = 'https://' + fileUrl;
-                
                 mainBox.style.display = 'block';
                 footerTools.style.display = 'flex';
                 
@@ -190,13 +145,7 @@
                 let clickTime = 0;
                 
                 actionBtn.addEventListener('click', function() {
-                    if(isUnlocked) { 
-                        // ۳. سیستم رهگیری آماری (Analytics سبک بدون نیاز به ابزار سنگین)
-                        // اینجا می‌تونی بفهمی کاربر واقعاً روی دکمه نهایی کلیک کرده
-                        console.log("فایل دانلود شد:", fileUrl);
-                        window.open(fileUrl, '_blank'); 
-                        return; 
-                    }
+                    if(isUnlocked) { window.open(fileUrl, '_blank'); return; }
                     clickTime = Date.now();
                     errorMsg.style.opacity = '0';
                     actionBtn.classList.add('disabled');
