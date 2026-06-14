@@ -6,11 +6,11 @@
     <title>دریافت فایل اختصاصی</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v3.3.0/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
-        /* استایل‌ها بدون تغییر (همون نسخه حرفه‌ای قبلی) */
         :root { --bg-color: #f8fafc; --text-main: #1e293b; --text-sub: #64748b; --card-bg: rgba(255, 255, 255, 0.75); --card-border: rgba(255, 255, 255, 0.9); --card-shadow: rgba(109, 40, 217, 0.1); --gallery-bg: rgba(255, 255, 255, 0.6); --gallery-border: rgba(255, 255, 255, 0.8); --toast-bg: rgba(239, 68, 68, 0.05); }
         [data-theme="dark"] { --bg-color: #0f172a; --text-main: #f8fafc; --text-sub: #94a3b8; --card-bg: rgba(30, 41, 59, 0.7); --card-border: rgba(51, 65, 85, 0.5); --card-shadow: rgba(0, 0, 0, 0.3); --gallery-bg: rgba(30, 41, 59, 0.5); --gallery-border: rgba(51, 65, 85, 0.4); --toast-bg: rgba(239, 68, 68, 0.15); }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; transition: background-color 0.3s, color 0.3s; }
         body { background-color: var(--bg-color); color: var(--text-main); display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; padding: 40px 15px; }
+        
         .theme-toggle { position: absolute; top: 20px; left: 20px; background: var(--card-bg); border: 1px solid var(--card-border); width: 44px; height: 44px; border-radius: 12px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 12px var(--card-shadow); z-index: 100; }
         .theme-toggle svg { width: 20px; height: 20px; fill: var(--text-main); }
         .bg-shape { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; animation: float 12s infinite alternate ease-in-out; }
@@ -59,7 +59,7 @@
         </button>
         <div class="download-counter">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
-            <span id="counterText">در حال دریافت آمار واقعی...</span>
+            <span id="counterText">در حال دریافت آمار...</span>
         </div>
         <div id="error-msg">تلاش مجدد (سریع برگشتید!)</div>
     </div>
@@ -73,7 +73,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
-        // تنظیمات فایربیس
         const firebaseConfig = {
             apiKey: "AIzaSyCJTgy_p2Hgkcs1qrprHhC7vBREBsEqFMg",
             authDomain: "kazheart-counter.firebaseapp.com",
@@ -87,7 +86,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // تم و گالری
+        // تم
         const themeToggle = document.getElementById('themeToggle');
         if (localStorage.getItem('theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
         themeToggle.addEventListener('click', () => {
@@ -101,16 +100,13 @@
             const data = urlParams.get('data');
             if(!data) { document.getElementById('fatal-error').style.display = 'block'; return; }
 
-            // سیستم شمارشگر
             let decoded = atob(data);
-            let fileUrl = decoded.split("|||")[1].trim();
+            let links = decoded.split("|||");
+            let fileUrl = links[1].trim();
             let fileId = btoa(fileUrl).replace(/[^a-zA-Z0-9]/g, "").substring(0, 15);
             const counterRef = ref(db, 'downloads/' + fileId);
 
-            // افزایش مقدار در اولین بار باز شدن
-            runTransaction(counterRef, (current) => (current || 0) + 1);
-            
-            // نمایش زنده
+            // فقط خواندن آمار برای نمایش (نه افزایش)
             onValue(counterRef, (snapshot) => {
                 document.getElementById('counterText').innerText = `${snapshot.val() || 0} نفر این فایل را دریافت کرده‌اند`;
             });
@@ -124,14 +120,13 @@
                 document.getElementById('galleryContainer').style.display = 'block';
             }
 
-            // منطق اصلی قفل
             let mainBox = document.getElementById('mainBox');
             let actionBtn = document.getElementById('actionBtn');
             let btnText = document.getElementById('btnText');
             let btnSpinner = document.getElementById('btnSpinner');
             let errorMsg = document.getElementById('error-msg');
             
-            let pageUrl = decoded.split("|||")[0].trim();
+            let pageUrl = links[0].trim();
             if(pageUrl && !pageUrl.startsWith('http')) pageUrl = 'https://' + pageUrl;
             mainBox.style.display = 'block';
             
@@ -139,8 +134,14 @@
             let clickTime = 0;
             
             actionBtn.addEventListener('click', function() {
-                if(isUnlocked) { window.open(fileUrl, '_blank'); return; }
+                if(isUnlocked) { 
+                    // *** افزایش آمار دقیقاً اینجا انجام میشه ***
+                    runTransaction(counterRef, (current) => (current || 0) + 1);
+                    window.open(fileUrl, '_blank'); 
+                    return; 
+                }
                 clickTime = Date.now();
+                errorMsg.style.opacity = '0';
                 actionBtn.classList.add('disabled');
                 btnText.innerText = 'منتظر بازگشت...';
                 btnSpinner.style.display = 'block';
