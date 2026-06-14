@@ -2,56 +2,184 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>تولید لینک قفل‌دار</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت حرفه‌ای کاژه آرت</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v3.3.0/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
-        body { font-family: Tahoma, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 400px; }
-        input { width: 95%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; text-align: left; direction: ltr; }
-        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; margin-top: 10px; }
-        button:hover { background: #0056b3; }
-        textarea { width: 95%; padding: 10px; margin-top: 15px; border-radius: 6px; border: 1px solid #ccc; height: 80px; text-align: left; direction: ltr; resize: none; line-height: 1.5; }
+        * { box-sizing: border-box; font-family: 'Vazirmatn', sans-serif; }
+        body { background: #f1f5f9; color: #1e293b; padding: 20px; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; }
+        .container { display: flex; gap: 20px; width: 100%; max-width: 1000px; flex-wrap: wrap; }
+        .box { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); flex: 1; min-width: 320px; }
+        h2 { font-size: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; margin-top: 0; margin-bottom: 25px; color: #0f172a; }
+        
+        label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #475569; }
+        input[type="text"], input[type="file"] { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #cbd5e1; border-radius: 8px; direction: ltr; text-align: left; background: #f8fafc; transition: all 0.3s; }
+        input[type="text"]:focus { border-color: #8b5cf6; outline: none; background: #fff; }
+        
+        .btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: 700; transition: all 0.3s; margin-bottom: 10px; }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 8px 15px rgba(126, 34, 206, 0.2); }
+        .btn-success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .btn-danger { background: #ef4444; padding: 8px; font-size: 12px; margin-top: 5px; }
+
+        textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; height: 90px; direction: ltr; text-align: left; resize: none; background: #f8fafc; }
+        
+        /* لیست ویترین */
+        .post-list { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .post-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px; text-align: center; }
+        .post-item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
+        .post-item h4 { font-size: 12px; margin: 0 0 10px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h2 style="text-align: center; margin-top:0;">پنل ساخت لینک</h2>
-        <label>لینک پیج اینستاگرام:</label>
-        <input type="text" id="pageLink" placeholder="https://instagram.com/yourpage">
-        
-        <label>لینک فایل برای دانلود:</label>
-        <input type="text" id="fileLink" placeholder="https://yourdrive.com/file.zip">
-        
-        <label>یوزرنیم گیت‌هاب شما:</label>
-        <input type="text" id="gitUser" placeholder="مثال: kazheart">
 
-        <label>اسم مخزن گیت‌هاب شما:</label>
-        <input type="text" id="gitRepo" placeholder="مثال: link">
-
-        <button onclick="generateLink()">ساخت لینک نهایی</button>
+    <div class="container">
         
-        <textarea id="resultLink" readonly placeholder="لینک نهایی اینجا نمایش داده می‌شود..."></textarea>
+        <div class="box">
+            <h2>۱. ساخت لینک قفل‌دار</h2>
+            <label>لینک پیج اینستاگرام:</label>
+            <input type="text" id="pageLink" placeholder="instagram.com/yourpage">
+            
+            <label>لینک فایل برای دانلود:</label>
+            <input type="text" id="fileLink" placeholder="drive.google.com/...">
+            
+            <label>یوزرنیم گیت‌هاب شما:</label>
+            <input type="text" id="gitUser" placeholder="مثال: kazheart">
+
+            <label>اسم مخزن گیت‌هاب شما:</label>
+            <input type="text" id="gitRepo" placeholder="مثال: link">
+
+            <button class="btn" onclick="generateLink()">ساخت لینک نهایی</button>
+            <textarea id="resultLink" readonly placeholder="لینک نهایی اینجا نمایش داده می‌شود..."></textarea>
+        </div>
+
+        <div class="box">
+            <h2>۲. مدیریت ویترین آموزش‌ها</h2>
+            
+            <label>عنوان آموزش:</label>
+            <input type="text" id="postTitle" placeholder="مثال: پک طلایی پرامپت نویسی" dir="rtl" style="text-align: right;">
+            
+            <label>لینک پست اینستاگرام:</label>
+            <input type="text" id="postLink" placeholder="instagram.com/p/...">
+            
+            <label>انتخاب عکس کاور:</label>
+            <input type="file" id="postImage" accept="image/png, image/jpeg, image/webp">
+
+            <button class="btn" onclick="addPost()">اضافه کردن به ویترین</button>
+            
+            <hr style="border:0; border-top:1px solid #e2e8f0; margin: 25px 0;">
+            
+            <h3 style="font-size: 16px; margin:0;">آیتم‌های فعلی ویترین:</h3>
+            <div class="post-list" id="galleryList"></div>
+            
+            <button class="btn btn-success" style="margin-top: 20px;" onclick="downloadData()">⬇️ دانلود فایل آپدیت (posts.js)</button>
+        </div>
     </div>
 
     <script>
+        // --- بخش اول: ساخت لینک ---
         function generateLink() {
             let page = document.getElementById('pageLink').value.trim();
             let file = document.getElementById('fileLink').value.trim();
             let user = document.getElementById('gitUser').value.trim();
             let repo = document.getElementById('gitRepo').value.trim();
 
-            if(!page || !file || !user || !repo) { 
-                alert("لطفا تمام کادرها را پر کنید."); 
-                return; 
-            }
+            if(!page || !file || !user || !repo) { alert("لطفا تمام کادرهای بخش لینک را پر کنید."); return; }
             
             let combined = page + "|||" + file;
-            let encoded = btoa(combined); 
-            
-            // ساخت اتوماتیک آدرس گیت‌هاب شما
+            let encoded = btoa(unescape(encodeURIComponent(combined))); 
             let mySiteUrl = `https://${user}.github.io/${repo}/`; 
-            
             document.getElementById('resultLink').value = mySiteUrl + "?data=" + encoded;
         }
+
+        // --- بخش دوم: مدیریت ویترین ---
+        let posts = JSON.parse(localStorage.getItem('kazhe_posts')) || [];
+
+        function renderGallery() {
+            let list = document.getElementById('galleryList');
+            list.innerHTML = '';
+            posts.forEach((post, index) => {
+                list.innerHTML += `
+                    <div class="post-item">
+                        <img src="${post.image}" alt="">
+                        <h4>${post.title}</h4>
+                        <button class="btn btn-danger" onclick="deletePost(${index})">حذف</button>
+                    </div>
+                `;
+            });
+            localStorage.setItem('kazhe_posts', JSON.stringify(posts));
+        }
+
+        // تغییر سایز و فشرده‌سازی عکس با Canvas
+        function resizeAndCompressImage(file, callback) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let img = new Image();
+                img.onload = function() {
+                    let canvas = document.createElement('canvas');
+                    let ctx = canvas.getContext('2d');
+                    
+                    // تنظیم سایز استاندارد و مربعی (300 در 300 پیکسل برای سرعت بالا)
+                    let size = 300;
+                    canvas.width = size; canvas.height = size;
+                    
+                    // برش عکس (Crop) از مرکز
+                    let offsetX = 0; let offsetY = 0;
+                    let minDim = Math.min(img.width, img.height);
+                    if (img.width > img.height) offsetX = (img.width - minDim) / 2;
+                    else offsetY = (img.height - minDim) / 2;
+                    
+                    ctx.drawImage(img, offsetX, offsetY, minDim, minDim, 0, 0, size, size);
+                    
+                    // فشرده سازی با فرمت WebP یا JPEG
+                    let compressedData = canvas.toDataURL('image/jpeg', 0.6);
+                    callback(compressedData);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function addPost() {
+            let title = document.getElementById('postTitle').value.trim();
+            let link = document.getElementById('postLink').value.trim();
+            let fileInput = document.getElementById('postImage');
+
+            if(!title || !link || fileInput.files.length === 0) {
+                alert("لطفا عنوان، لینک و عکس را وارد کنید."); return;
+            }
+
+            resizeAndCompressImage(fileInput.files[0], function(base64Image) {
+                posts.push({ title: title, link: link, image: base64Image });
+                renderGallery();
+                
+                // پاک کردن فرم
+                document.getElementById('postTitle').value = '';
+                document.getElementById('postLink').value = '';
+                document.getElementById('postImage').value = '';
+            });
+        }
+
+        function deletePost(index) {
+            posts.splice(index, 1);
+            renderGallery();
+        }
+
+        // ساخت و دانلود فایل نهایی برای گیت‌هاب
+        function downloadData() {
+            if(posts.length === 0) { alert("ویترین شما خالی است!"); return; }
+            
+            let jsContent = "window.myPosts = " + JSON.stringify(posts, null, 4) + ";";
+            let blob = new Blob([jsContent], { type: "application/javascript" });
+            let link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = "posts.js";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // لود اولیه
+        renderGallery();
     </script>
 </body>
 </html>
