@@ -6,264 +6,121 @@
     <title>دریافت فایل اختصاصی</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v3.3.0/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --bg:         #f7f5ff;
-            --surface:    #ffffff;
-            --border:     #e8e2f8;
-            --border-md:  #d4ccea;
-            --purple:     #6d40c4;
-            --purple-lt:  #8b5cf6;
-            --purple-xs:  #ede9fb;
-            --text:       #1a1525;
-            --muted:      #7a6d96;
-            --hint:       #b0a8cc;
-            --green:      #059669;
-            --green-bg:   #ecfdf5;
-            --green-bdr:  #a7f3d0;
-            --red:        #dc2626;
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; }
+        
+        body { 
+            background-color: #f8fafc; /* سفید مینیمال */
+            color: #1e293b; /* رنگ متن تیره برای خوانایی عالی */
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
+            overflow: hidden; /* جلوگیری از اسکرول به خاطر هاله های متحرک */
+            position: relative;
         }
 
-        body {
-            font-family: 'Vazirmatn', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .card {
-            width: 90%;
-            max-width: 356px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 44px 32px 36px;
-            text-align: center;
-            box-shadow: 0 2px 16px rgba(109, 64, 196, 0.06);
-        }
-
-        /* ─── آیکون ─── */
-        .icon-wrap {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 26px;
-            border-radius: 16px;
-            background: var(--purple-xs);
-            border: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.4s, border-color 0.4s;
-        }
-
-        .icon-wrap svg {
-            width: 26px;
-            height: 26px;
-            fill: var(--purple);
-            transition: fill 0.4s;
-        }
-
-        /* ─── خط تزئینی زیر آیکون ─── */
-        .divider {
-            width: 32px;
-            height: 2px;
-            background: var(--purple-xs);
-            border-radius: 2px;
-            margin: 0 auto 20px;
-            transition: background 0.4s;
-        }
-
-        h2 {
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 8px;
-            letter-spacing: -0.2px;
-        }
-
-        .subtitle {
-            font-size: 13px;
-            color: var(--muted);
-            line-height: 1.85;
-            margin-bottom: 30px;
-        }
-
-        /* ─── دکمه ─── */
-        .btn {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 9px;
-            width: 100%;
-            padding: 14px 0;
-            background: var(--purple);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 10px;
-            font-family: 'Vazirmatn', sans-serif;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            border: none;
-            letter-spacing: 0.1px;
-            transition: background 0.2s, transform 0.15s, opacity 0.2s;
-        }
-
-        .btn:hover  { background: var(--purple-lt); transform: translateY(-1px); }
-        .btn:active { transform: translateY(0); }
-        .btn.loading { opacity: 0.65; pointer-events: none; }
-
-        .btn.success {
-            background: var(--green-bg);
-            color: var(--green);
-            border: 1px solid var(--green-bdr);
-        }
-        .btn.success:hover { background: #d1fae5; transform: translateY(-1px); }
-
-        /* ─── اسپینر ─── */
-        .spinner {
-            width: 16px; height: 16px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top-color: #fff;
+        /* انیمیشن فرم‌های نرم در پس‌زمینه (برای نمایان شدن افکت شیشه‌ای) */
+        .bg-shape {
+            position: absolute;
             border-radius: 50%;
-            animation: spin 0.85s linear infinite;
-            display: none;
-            flex-shrink: 0;
+            filter: blur(80px);
+            z-index: -1;
+            animation: float 12s infinite alternate ease-in-out;
+        }
+        .shape1 {
+            width: 350px; height: 350px;
+            background: rgba(139, 92, 246, 0.25); /* بنفش ملایم */
+            top: 5%; left: 15%;
+        }
+        .shape2 {
+            width: 400px; height: 400px;
+            background: rgba(196, 181, 253, 0.35); /* بنفش روشن تر */
+            bottom: 5%; right: 10%;
+            animation-delay: -6s;
+        }
+        @keyframes float { 
+            0% { transform: translateY(0px) scale(1); } 
+            100% { transform: translateY(40px) scale(1.1); } 
+        }
+
+        /* طراحی شیشه ای روشن (Light Glassmorphism) */
+        .card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 28px;
+            padding: 45px 35px;
+            text-align: center;
+            box-shadow: 0 20px 50px -10px rgba(109, 40, 217, 0.1); /* سایه بسیار نرم بنفش */
+            width: 90%; max-width: 380px; 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
+        }
+
+        .icon-box {
+            width: 75px; height: 75px; margin: 0 auto 25px; border-radius: 50%;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(109, 40, 217, 0.05));
+            display: flex; justify-content: center; align-items: center;
+            border: 1px solid rgba(139, 92, 246, 0.2); 
+            transition: all 0.4s ease;
+            box-shadow: inset 0 2px 10px rgba(255,255,255,0.5);
+        }
+        .icon-box svg { width: 34px; height: 34px; fill: #8b5cf6; transition: all 0.3s ease;}
+        
+        h2 { font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 12px; letter-spacing: -0.5px;}
+        p.subtitle { color: #64748b; font-size: 14px; margin-bottom: 35px; line-height: 1.8; font-weight: 400;}
+        
+        .btn {
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            width: 100%; padding: 18px 0;
+            background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); /* گرادیانت بنفش مدرن */
+            color: white; text-decoration: none; border-radius: 16px;
+            font-weight: 700; font-size: 16px; cursor: pointer;
+            border: none; transition: all 0.3s ease; 
+            box-shadow: 0 10px 20px rgba(126, 34, 206, 0.2);
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(126, 34, 206, 0.3); }
+        .btn.disabled { opacity: 0.85; pointer-events: none; animation: pulse 2s infinite; }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(126, 34, 206, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(126, 34, 206, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(126, 34, 206, 0); }
+        }
+
+        /* استایل حالت باز شده (سبز مینیمال برای موفقیت) */
+        .card.unlocked .icon-box { background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2); }
+        .card.unlocked .icon-box svg { fill: #10b981; }
+        .btn.unlocked-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+        }
+        .btn.unlocked-btn:hover { box-shadow: 0 15px 25px rgba(16, 185, 129, 0.3); }
+
+        /* لودینگ متناسب با تم لایت */
+        .spinner {
+            width: 22px; height: 22px; border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%; border-top-color: white; animation: spin 0.8s linear infinite; display: none;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ─── پیام خطا ─── */
-        #error-msg {
-            margin-top: 12px;
-            font-size: 12px;
-            color: var(--red);
-            font-weight: 600;
-            min-height: 16px;
-            opacity: 0;
-            transition: opacity 0.25s;
+        
+        #error-msg { 
+            color: #ef4444; font-size: 13.5px; margin-top: 20px; font-weight: 600; 
+            min-height: 20px; opacity: 0; transition: opacity 0.3s;
+            background: rgba(239, 68, 68, 0.05); padding: 10px; border-radius: 8px;
         }
-
-        /* ─── حالت باز ─── */
-        .card.unlocked .icon-wrap {
-            background: var(--green-bg);
-            border-color: var(--green-bdr);
-        }
-        .card.unlocked .icon-wrap svg { fill: var(--green); }
-        .card.unlocked .divider       { background: var(--green-bdr); }
-
-        /* ─── خطای فاتال ─── */
-        #fatal-error {
-            display: none;
-            color: var(--red);
-            font-size: 15px;
-            font-weight: 700;
-            text-align: center;
-        }
+        #fatal-error { display: none; color: #ef4444; font-weight: bold; text-align: center; z-index: 10; }
     </style>
 </head>
 <body>
 
-<div class="card" id="mainBox">
-    <div class="icon-wrap" id="iconWrap">
-        <svg id="iconSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-            <path d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"/>
-        </svg>
-    </div>
+    <div class="bg-shape shape1"></div>
+    <div class="bg-shape shape2"></div>
 
-    <div class="divider" id="divider"></div>
-
-    <h2 id="statusTitle">فایل قفل است</h2>
-    <p class="subtitle" id="statusDesc">برای دسترسی به فایل آموزشی، ابتدا پیج ما را در اینستاگرام دنبال کنید.</p>
-
-    <a href="#" id="actionBtn" class="btn" target="_blank">
-        <div class="spinner" id="btnSpinner"></div>
-        <span id="btnText">فالو کردن پیج</span>
-    </a>
-
-    <div id="error-msg">هنوز فالو نکرده‌اید — دوباره امتحان کنید</div>
-</div>
-
-<h3 id="fatal-error">لینک نامعتبر یا دستکاری شده است!</h3>
-
-<script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const data = urlParams.get('data');
-    let isUnlocked = false;
-    let clickTime = 0;
-
-    if (data) {
-        try {
-            const decoded = atob(data);
-            const links   = decoded.split("|||");
-
-            const btn         = document.getElementById('actionBtn');
-            const btnText     = document.getElementById('btnText');
-            const btnSpinner  = document.getElementById('btnSpinner');
-            const errorMsg    = document.getElementById('error-msg');
-            const card        = document.getElementById('mainBox');
-            const statusTitle = document.getElementById('statusTitle');
-            const statusDesc  = document.getElementById('statusDesc');
-            const iconSvg     = document.getElementById('iconSvg');
-
-            btn.href = links[0];
-
-            btn.addEventListener('click', function () {
-                if (isUnlocked) return;
-
-                clickTime = Date.now();
-                errorMsg.style.opacity = '0';
-                btn.classList.add('loading');
-                btnText.innerText = 'در حال انتظار...';
-
-                window.addEventListener('focus', function unlockProcess() {
-                    if (isUnlocked) return;
-
-                    const timeAway = Date.now() - clickTime;
-
-                    if (timeAway < 4000) {
-                        errorMsg.style.opacity = '1';
-                        btn.classList.remove('loading');
-                        btnText.innerText = 'تلاش مجدد';
-                        window.removeEventListener('focus', unlockProcess);
-                        return;
-                    }
-
-                    window.removeEventListener('focus', unlockProcess);
-                    btnText.innerText = 'در حال بررسی...';
-                    btnSpinner.style.display = 'block';
-                    btn.removeAttribute('href');
-
-                    setTimeout(() => {
-                        isUnlocked = true;
-                        card.classList.add('unlocked');
-                        btnSpinner.style.display = 'none';
-                        btn.classList.remove('loading');
-
-                        statusTitle.innerText = 'قفل باز شد!';
-                        statusDesc.innerText  = 'ممنون از همراهی‌ات. فایل آماده‌ی دریافت است.';
-
-                        iconSvg.innerHTML = '<path d="M224 64c-44.2 0-80 35.8-80 80v48H384c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80V144C80 64.5 144.5 0 224 0c70.5 0 129 50.8 141.6 118.7c2.9 15.6-7.5 30.6-23.1 33.5s-30.6-7.5-33.5-23.1C301.9 83.1 266.3 64 224 64z"/>';
-
-                        btn.classList.add('success');
-                        btnText.innerText = 'دانلود فایل';
-                        btn.href = links[1];
-                        btn.setAttribute('target', '_blank');
-                    }, 3000);
-                });
-            });
-
-        } catch (e) {
-            document.getElementById('mainBox').style.display = 'none';
-            document.getElementById('fatal-error').style.display = 'block';
-        }
-    } else {
-        document.getElementById('mainBox').style.display = 'none';
-        document.getElementById('fatal-error').style.display = 'block';
-    }
-</script>
-</body>
-</html>
+    <div class="card" id="mainBox">
+        <div class="icon-box" id="statusIcon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"/></svg>
+        </div>
+        <h2 id="statusTitle">فایل قفل است</h2>
+        <p class="subtitle" id="statusDesc">برای دسترسی به فایل مورد نظر، لطفا ابتدا پیج را در اینستاگرام دنبال کنید.</p>
+        
+        <a href="#" id="actionBtn" class="btn" target="_blank">
+            <div class="spinner" id="btnSpinner"></div>
