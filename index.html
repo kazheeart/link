@@ -9,50 +9,31 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; }
         
         body { 
-            background-color: #f8fafc; /* سفید مینیمال */
-            color: #1e293b; /* رنگ متن تیره برای خوانایی عالی */
+            background-color: #f8fafc;
+            color: #1e293b;
             display: flex; justify-content: center; align-items: center; min-height: 100vh;
-            overflow: hidden; /* جلوگیری از اسکرول به خاطر هاله های متحرک */
+            overflow: hidden;
             position: relative;
         }
 
-        /* انیمیشن فرم‌های نرم در پس‌زمینه (برای نمایان شدن افکت شیشه‌ای) */
+        /* انیمیشن فرم‌های نرم در پس‌زمینه */
         .bg-shape {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: -1;
+            position: absolute; border-radius: 50%; filter: blur(80px); z-index: -1;
             animation: float 12s infinite alternate ease-in-out;
         }
-        .shape1 {
-            width: 350px; height: 350px;
-            background: rgba(139, 92, 246, 0.25); /* بنفش ملایم */
-            top: 5%; left: 15%;
-        }
-        .shape2 {
-            width: 400px; height: 400px;
-            background: rgba(196, 181, 253, 0.35); /* بنفش روشن تر */
-            bottom: 5%; right: 10%;
-            animation-delay: -6s;
-        }
-        @keyframes float { 
-            0% { transform: translateY(0px) scale(1); } 
-            100% { transform: translateY(40px) scale(1.1); } 
-        }
+        .shape1 { width: 350px; height: 350px; background: rgba(139, 92, 246, 0.25); top: 5%; left: 15%; }
+        .shape2 { width: 400px; height: 400px; background: rgba(196, 181, 253, 0.35); bottom: 5%; right: 10%; animation-delay: -6s; }
+        @keyframes float { 0% { transform: translateY(0px) scale(1); } 100% { transform: translateY(40px) scale(1.1); } }
 
-        /* طراحی شیشه ای روشن (Light Glassmorphism) */
+        /* طراحی شیشه ای روشن */
         .card {
             background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.9);
-            border-radius: 28px;
-            padding: 45px 35px;
-            text-align: center;
-            box-shadow: 0 20px 50px -10px rgba(109, 40, 217, 0.1); /* سایه بسیار نرم بنفش */
+            border-radius: 28px; padding: 45px 35px; text-align: center;
+            box-shadow: 0 20px 50px -10px rgba(109, 40, 217, 0.1);
             width: 90%; max-width: 380px; 
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 10;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 10;
         }
 
         .icon-box {
@@ -60,44 +41,32 @@
             background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(109, 40, 217, 0.05));
             display: flex; justify-content: center; align-items: center;
             border: 1px solid rgba(139, 92, 246, 0.2); 
-            transition: all 0.4s ease;
-            box-shadow: inset 0 2px 10px rgba(255,255,255,0.5);
+            transition: all 0.4s ease; box-shadow: inset 0 2px 10px rgba(255,255,255,0.5);
         }
         .icon-box svg { width: 34px; height: 34px; fill: #8b5cf6; transition: all 0.3s ease;}
         
-        h2 { font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 12px; letter-spacing: -0.5px;}
-        p.subtitle { color: #64748b; font-size: 14px; margin-bottom: 35px; line-height: 1.8; font-weight: 400;}
+        h2 { font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 12px; }
+        p.subtitle { color: #64748b; font-size: 14px; margin-bottom: 35px; line-height: 1.8; }
         
         .btn {
             display: flex; justify-content: center; align-items: center; gap: 10px;
             width: 100%; padding: 18px 0;
-            background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); /* گرادیانت بنفش مدرن */
+            background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
             color: white; text-decoration: none; border-radius: 16px;
-            font-weight: 700; font-size: 16px; cursor: pointer;
-            border: none; transition: all 0.3s ease; 
+            font-weight: 700; font-size: 16px; cursor: pointer; border: none; transition: all 0.3s ease; 
             box-shadow: 0 10px 20px rgba(126, 34, 206, 0.2);
         }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(126, 34, 206, 0.3); }
-        .btn.disabled { opacity: 0.85; pointer-events: none; animation: pulse 2s infinite; }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(126, 34, 206, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(126, 34, 206, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(126, 34, 206, 0); }
-        }
+        .btn.disabled { opacity: 0.85; pointer-events: none; }
 
-        /* استایل حالت باز شده (سبز مینیمال برای موفقیت) */
+        /* استایل حالت موفقیت */
         .card.unlocked .icon-box { background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2); }
         .card.unlocked .icon-box svg { fill: #10b981; }
-        .btn.unlocked-btn {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
-        }
+        .btn.unlocked-btn { background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
         .btn.unlocked-btn:hover { box-shadow: 0 15px 25px rgba(16, 185, 129, 0.3); }
 
-        /* لودینگ متناسب با تم لایت */
         .spinner {
-            width: 22px; height: 22px; border: 3px solid rgba(255,255,255,0.3);
+            width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3);
             border-radius: 50%; border-top-color: white; animation: spin 0.8s linear infinite; display: none;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -124,3 +93,93 @@
         
         <a href="#" id="actionBtn" class="btn" target="_blank">
             <div class="spinner" id="btnSpinner"></div>
+            <span id="btnText">فالو کردن پیج</span>
+        </a>
+        
+        <div id="error-msg">هنوز فالو نکرده‌اید — دوباره امتحان کنید</div>
+    </div>
+
+    <h3 id="fatal-error">لینک نامعتبر یا دستکاری شده است!</h3>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const data = urlParams.get('data');
+        let isUnlocked = false;
+        let clickTime = 0;
+
+        if(data) {
+            try {
+                let decoded = atob(data);
+                let links = decoded.split("|||");
+                
+                // اصلاح هوشمند لینک‌ها در صورت فراموش کردن https
+                let pageUrl = links[0].trim();
+                let fileUrl = links[1].trim();
+                if(pageUrl && !pageUrl.startsWith('http')) pageUrl = 'https://' + pageUrl;
+                if(fileUrl && !fileUrl.startsWith('http')) fileUrl = 'https://' + fileUrl;
+                
+                let btn = document.getElementById('actionBtn');
+                let btnText = document.getElementById('btnText');
+                let btnSpinner = document.getElementById('btnSpinner');
+                let errorMsg = document.getElementById('error-msg');
+                let card = document.getElementById('mainBox');
+                
+                btn.href = pageUrl;
+
+                btn.addEventListener('click', function() {
+                    if(isUnlocked) return;
+                    
+                    clickTime = Date.now();
+                    errorMsg.style.opacity = '0';
+                    btn.classList.add('disabled');
+                    btnText.innerText = 'در حال انتظار...';
+
+                    window.addEventListener('focus', function unlockProcess() {
+                        if(!isUnlocked) {
+                            let timeAway = Date.now() - clickTime;
+                            
+                            // حساسیت تایمر کاهش یافت به 1.5 ثانیه
+                            if(timeAway < 1500) {
+                                errorMsg.style.opacity = '1';
+                                btn.classList.remove('disabled');
+                                btnText.innerText = 'تلاش مجدد';
+                                window.removeEventListener('focus', unlockProcess);
+                                return;
+                            }
+
+                            window.removeEventListener('focus', unlockProcess);
+                            btnText.innerText = 'در حال بررسی...';
+                            btnSpinner.style.display = 'block';
+                            
+                            // جلوگیری از کلیک مجدد هنگام لودینگ
+                            btn.removeAttribute('href'); 
+                            
+                            setTimeout(() => {
+                                isUnlocked = true;
+                                card.classList.add('unlocked');
+                                btnSpinner.style.display = 'none';
+                                
+                                document.getElementById('statusTitle').innerText = 'قفل باز شد!';
+                                document.getElementById('statusDesc').innerText = 'ممنون از همراهی شما. حالا می‌توانید فایل را دریافت کنید.';
+                                document.getElementById('statusIcon').innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224 64c-44.2 0-80 35.8-80 80v48H384c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80V144C80 64.5 144.5 0 224 0c70.5 0 129 50.8 141.6 118.7c2.9 15.6-7.5 30.6-23.1 33.5s-30.6-7.5-33.5-23.1C301.9 83.1 266.3 64 224 64z"/></svg>';
+                                
+                                btn.classList.remove('disabled');
+                                btn.classList.add('unlocked-btn');
+                                btnText.innerText = 'دانلود فایل';
+                                btn.href = fileUrl; // اختصاص لینک فایل
+                                
+                            }, 2500); // زمان لودینگ 2.5 ثانیه
+                        }
+                    });
+                });
+            } catch(e) {
+                document.getElementById('mainBox').style.display = 'none';
+                document.getElementById('fatal-error').style.display = 'block';
+            }
+        } else {
+            document.getElementById('mainBox').style.display = 'none';
+            document.getElementById('fatal-error').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
