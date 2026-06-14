@@ -63,7 +63,7 @@
         
         #error-msg { 
             color: #ef4444; font-size: 13.5px; margin-top: 20px; font-weight: 600; 
-            min-height: 20px; opacity: 0; background: rgba(239, 68, 68, 0.05); padding: 10px; border-radius: 8px;
+            min-height: 20px; opacity: 0; background: rgba(239, 68, 68, 0.05); padding: 10px; border-radius: 8px; transition: opacity 0.3s;
         }
         
         #fatal-error { display: none; color: #ef4444; font-weight: bold; text-align: center; background: white; padding: 20px; border-radius: 12px; }
@@ -79,12 +79,12 @@
         .gallery-card {
             background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.8); border-radius: 16px; padding: 10px;
-            text-decoration: none; color: #1e293b; transition: transform 0.3s;
+            text-decoration: none; color: #1e293b; transition: transform 0.3s; display: block;
         }
         .gallery-card:hover { transform: translateY(-5px); }
         .gallery-card img {
             width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; margin-bottom: 10px;
-            background: #e2e8f0; /* رنگ جایگزین تا لود شدن عکس */
+            background: #e2e8f0; 
         }
         .gallery-card h4 { font-size: 13px; font-weight: 600; text-align: center; line-height: 1.4; }
     </style>
@@ -120,11 +120,10 @@
 
     <script>
         window.onload = function() {
-            // ساختن گالری اگر دیتابیس وجود داشت
+            // ساختن گالری
             if (window.myPosts && window.myPosts.length > 0) {
                 let grid = document.getElementById('galleryGrid');
                 window.myPosts.forEach(post => {
-                    // استفاده از loading="lazy" برای سرعت لود بالا
                     grid.innerHTML += `
                         <a href="${post.link}" target="_blank" class="gallery-card">
                             <img src="${post.image}" alt="${post.title}" loading="lazy">
@@ -135,7 +134,6 @@
                 document.getElementById('galleryContainer').style.display = 'block';
             }
 
-            // منطق اصلی قفل فایل
             const urlParams = new URLSearchParams(window.location.search);
             const data = urlParams.get('data');
             
@@ -163,41 +161,54 @@
                 let isWaitingForReturn = false;
                 let clickTime = 0;
                 
-                // تابع پردازشِ زمان بازگشت کاربر به صفحه
+                function unlockFile() {
+                    isUnlocked = true;
+                    mainBox.classList.add('unlocked');
+                    btnSpinner.style.display = 'none';
+                    
+                    document.getElementById('statusTitle').innerText = 'قفل باز شد!';
+                    document.getElementById('statusDesc').innerText = 'ممنون از همراهی شما. حالا می‌توانید فایل را دریافت کنید.';
+                    document.getElementById('statusIcon').innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224 64c-44.2 0-80 35.8-80 80v48H384c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80V144C80 64.5 144.5 0 224 0c70.5 0 129 50.8 141.6 118.7c2.9 15.6-7.5 30.6-23.1 33.5s-30.6-7.5-33.5-23.1C301.9 83.1 266.3 64 224 64z"/></svg>';
+                    
+                    actionBtn.classList.remove('disabled');
+                    actionBtn.classList.add('unlocked-btn');
+                    btnText.innerText = 'دانلود فایل';
+                }
+
                 function handleUserReturn() {
                     if (!isWaitingForReturn || isUnlocked) return;
                     
                     let timeAway = Date.now() - clickTime;
-                    isWaitingForReturn = false; // رست کردن وضعیت
 
-                    // در موبایل 1.5 ثانیه زمان معقولیه
-                    if(timeAway < 1500) { 
+                    // زمان خطایابی به کمتر از 1 ثانیه کاهش یافت تا پاپ‌آپ‌های سیستم‌عامل موبایل رو گیر نندازه
+                    if(timeAway < 800) { 
+                        isWaitingForReturn = false;
                         errorMsg.style.opacity = '1';
                         actionBtn.classList.remove('disabled');
-                        btnText.innerText = 'تلاش مجدد';
+                        btnSpinner.style.display = 'none';
+                        btnText.innerText = 'تلاش مجدد (فالو)';
                         return;
                     }
                     
-                    // بررسی موفقیت آمیز
-                    btnText.innerText = 'در حال بررسی...';
-                    btnSpinner.style.display = 'block';
+                    isWaitingForReturn = false; // متوقف کردن چک کردن مجدد
+                    errorMsg.style.opacity = '0';
                     
-                    setTimeout(() => {
-                        isUnlocked = true;
-                        mainBox.classList.add('unlocked');
-                        btnSpinner.style.display = 'none';
-                        
-                        document.getElementById('statusTitle').innerText = 'قفل باز شد!';
-                        document.getElementById('statusDesc').innerText = 'ممنون از همراهی شما. حالا می‌توانید فایل را دریافت کنید.';
-                        document.getElementById('statusIcon').innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224 64c-44.2 0-80 35.8-80 80v48H384c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80V144C80 64.5 144.5 0 224 0c70.5 0 129 50.8 141.6 118.7c2.9 15.6-7.5 30.6-23.1 33.5s-30.6-7.5-33.5-23.1C301.9 83.1 266.3 64 224 64z"/></svg>';
-                        
-                        actionBtn.classList.remove('disabled');
-                        actionBtn.classList.add('unlocked-btn');
-                        btnText.innerText = 'دانلود فایل';
-                    }, 2500);
+                    // ایده تایمر قابل رویت
+                    let countdown = 3;
+                    btnSpinner.style.display = 'block';
+                    btnText.innerText = `در حال بررسی... (${countdown})`;
+                    
+                    let timerInterval = setInterval(() => {
+                        countdown--;
+                        if(countdown > 0) {
+                            btnText.innerText = `در حال بررسی... (${countdown})`;
+                        } else {
+                            clearInterval(timerInterval);
+                            unlockFile();
+                        }
+                    }, 1000);
                 }
 
-                // رویداد کلیک دکمه
                 actionBtn.addEventListener('click', function() {
                     if(isUnlocked) { window.open(fileUrl, '_blank'); return; }
                     
@@ -205,9 +216,11 @@
                     isWaitingForReturn = true;
                     errorMsg.style.opacity = '0';
                     actionBtn.classList.add('disabled');
-                    btnText.innerText = 'در حال انتظار...';
                     
-                    // هدایت به اینستاگرام
+                    btnText.innerText = 'در حال انتقال...';
+                    btnSpinner.style.display = 'block';
+                    
+                    // باز کردن پیج در تب جدید
                     let linkElement = document.createElement('a');
                     linkElement.href = pageUrl;
                     linkElement.target = '_blank';
@@ -216,14 +229,10 @@
                     document.body.removeChild(linkElement);
                 });
 
-                // API اصلی برای حل باگ موبایل (تشخیص خروج و ورود واقعی به مرورگر)
+                // ترکیب دو رویداد برای پوشش دادن تمام مرورگرهای اندروید و آیفون
                 document.addEventListener("visibilitychange", () => {
-                    if (document.visibilityState === "visible") {
-                        handleUserReturn();
-                    }
+                    if (document.visibilityState === "visible") handleUserReturn();
                 });
-                
-                // بک‌آپ برای کامپیوتر
                 window.addEventListener('focus', handleUserReturn);
                 
             } catch(e) { document.getElementById('fatal-error').style.display = 'block'; }
