@@ -6,166 +6,277 @@
     <title>دریافت فایل اختصاصی</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v3.3.0/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; }
-        body { 
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh;
-        }
-        /* طراحی شیشه ای (Glassmorphism) */
-        .card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 24px;
-            padding: 40px 30px;
-            text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            width: 90%; max-width: 380px; transition: all 0.4s ease;
-        }
-        .icon-box {
-            width: 70px; height: 70px; margin: 0 auto 20px; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            display: flex; justify-content: center; align-items: center;
-            border: 1px solid rgba(255,255,255,0.1); transition: all 0.4s ease;
-        }
-        .icon-box svg { width: 32px; height: 32px; fill: #cbd5e1; transition: all 0.3s ease;}
-        h2 { font-size: 20px; font-weight: 700; color: #f1f5f9; margin-bottom: 10px; }
-        p.subtitle { color: #94a3b8; font-size: 13.5px; margin-bottom: 30px; line-height: 1.7; }
-        
-        .btn {
-            display: flex; justify-content: center; align-items: center; gap: 10px;
-            width: 100%; padding: 16px 0;
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-            color: white; text-decoration: none; border-radius: 14px;
-            font-weight: 700; font-size: 15px; cursor: pointer;
-            border: none; transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(220, 39, 67, 0.25);
-        }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(220, 39, 67, 0.35); }
-        .btn.disabled { opacity: 0.7; pointer-events: none; }
-        
-        /* استایل حالت باز شده */
-        .card.unlocked .icon-box { background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); }
-        .card.unlocked .icon-box svg { fill: #10b981; }
-        .btn.unlocked-btn {
-            background: #10b981; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25);
-        }
-        .btn.unlocked-btn:hover { box-shadow: 0 12px 25px rgba(16, 185, 129, 0.35); }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* لودینگ و پیام خطا */
+        :root {
+            --bg:        #0e0618;
+            --surface:   #160d28;
+            --border:    rgba(124, 58, 237, 0.18);
+            --purple:    #7c3aed;
+            --purple-lt: #a78bfa;
+            --purple-xs: rgba(124, 58, 237, 0.08);
+            --white:     #f8f5ff;
+            --muted:     #9585b4;
+            --green:     #34d399;
+            --green-bg:  rgba(52, 211, 153, 0.08);
+            --green-bdr: rgba(52, 211, 153, 0.25);
+            --red:       #f87171;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: var(--bg);
+            color: var(--white);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* ─── کارت ─── */
+        .card {
+            width: 90%;
+            max-width: 360px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 44px 32px 36px;
+            text-align: center;
+        }
+
+        /* ─── آیکون ─── */
+        .icon-ring {
+            position: relative;
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 28px;
+        }
+
+        .icon-ring::before {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 1.5px solid var(--purple-lt);
+            opacity: 0.45;
+            animation: pulse 2.8s ease-in-out infinite;
+        }
+
+        .icon-inner {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: var(--purple-xs);
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.5s, border-color 0.5s;
+        }
+
+        .icon-inner svg {
+            width: 28px;
+            height: 28px;
+            fill: var(--purple-lt);
+            transition: fill 0.5s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.45; }
+            50%       { transform: scale(1.12); opacity: 0.15; }
+        }
+
+        /* ─── متون ─── */
+        h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 10px;
+            letter-spacing: -0.3px;
+        }
+
+        .subtitle {
+            font-size: 13.5px;
+            color: var(--muted);
+            line-height: 1.8;
+            margin-bottom: 32px;
+        }
+
+        /* ─── دکمه ─── */
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 15px 0;
+            background: var(--purple);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 700;
+            font-size: 14.5px;
+            cursor: pointer;
+            border: none;
+            transition: background 0.3s, opacity 0.3s, transform 0.2s;
+        }
+
+        .btn:hover { background: #6d28d9; transform: translateY(-2px); }
+        .btn:active { transform: translateY(0); }
+
+        .btn.loading { opacity: 0.75; pointer-events: none; }
+
+        .btn.success {
+            background: transparent;
+            border: 1px solid var(--green-bdr);
+            color: var(--green);
+        }
+        .btn.success:hover { background: var(--green-bg); transform: translateY(-2px); }
+
+        /* ─── اسپینر ─── */
         .spinner {
-            width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%; border-top-color: white; animation: spin 1s ease-in-out infinite; display: none;
+            width: 18px; height: 18px;
+            border: 2px solid rgba(255,255,255,0.25);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+            display: none;
+            flex-shrink: 0;
         }
+
         @keyframes spin { to { transform: rotate(360deg); } }
-        
-        #error-msg { 
-            color: #ef4444; font-size: 13px; margin-top: 15px; font-weight: 600; 
-            min-height: 20px; opacity: 0; transition: opacity 0.3s;
+
+        /* ─── پیام خطا ─── */
+        #error-msg {
+            margin-top: 14px;
+            font-size: 12.5px;
+            color: var(--red);
+            font-weight: 600;
+            min-height: 18px;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
-        #fatal-error { display: none; color: #ef4444; font-weight: bold; text-align: center; }
+
+        /* ─── حالت باز شده ─── */
+        .card.unlocked .icon-inner {
+            background: var(--green-bg);
+            border-color: var(--green-bdr);
+        }
+        .card.unlocked .icon-inner svg { fill: var(--green); }
+        .card.unlocked .icon-ring::before { border-color: var(--green); }
+
+        /* ─── خطای فاتال ─── */
+        #fatal-error {
+            display: none;
+            color: var(--red);
+            font-size: 15px;
+            font-weight: 700;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
-    <div class="card" id="mainBox">
-        <div class="icon-box" id="statusIcon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"/></svg>
+<div class="card" id="mainBox">
+    <div class="icon-ring">
+        <div class="icon-inner" id="iconInner">
+            <svg id="iconSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"/>
+            </svg>
         </div>
-        <h2 id="statusTitle">فایل قفل است</h2>
-        <p class="subtitle" id="statusDesc">برای دسترسی به فایل آموزشی، لطفا ابتدا پیج ما را در اینستاگرام دنبال کنید.</p>
-        
-        <a href="#" id="actionBtn" class="btn" target="_blank">
-            <div class="spinner" id="btnSpinner"></div>
-            <span id="btnText">فالو کردن پیج</span>
-        </a>
-        
-        <div id="error-msg">به نظر می‌رسد هنوز فالو نکرده‌اید!</div>
     </div>
 
-    <h3 id="fatal-error">لینک نامعتبر یا دستکاری شده است!</h3>
+    <h2 id="statusTitle">فایل قفل است</h2>
+    <p class="subtitle" id="statusDesc">برای دسترسی به فایل آموزشی، ابتدا پیج ما را در اینستاگرام دنبال کنید.</p>
 
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const data = urlParams.get('data');
-        let isUnlocked = false;
-        let clickTime = 0;
+    <a href="#" id="actionBtn" class="btn" target="_blank">
+        <div class="spinner" id="btnSpinner"></div>
+        <span id="btnText">فالو کردن پیج</span>
+    </a>
 
-        if(data) {
-            try {
-                let decoded = atob(data);
-                let links = decoded.split("|||");
-                
-                let btn = document.getElementById('actionBtn');
-                let btnText = document.getElementById('btnText');
-                let btnSpinner = document.getElementById('btnSpinner');
-                let errorMsg = document.getElementById('error-msg');
-                let card = document.getElementById('mainBox');
-                let statusTitle = document.getElementById('statusTitle');
-                let statusDesc = document.getElementById('statusDesc');
-                let statusIcon = document.getElementById('statusIcon');
+    <div id="error-msg">هنوز فالو نکرده‌اید — دوباره امتحان کنید</div>
+</div>
 
-                btn.href = links[0]; // لینک اینستاگرام
+<h3 id="fatal-error">لینک نامعتبر یا دستکاری شده است!</h3>
 
-                btn.addEventListener('click', function() {
-                    if(isUnlocked) return;
-                    
-                    clickTime = Date.now(); // ثبت زمان کلیک
-                    errorMsg.style.opacity = '0'; // پاک کردن خطای قبلی
-                    
-                    // تغییر ظاهر دکمه به حالت انتظار
-                    btn.classList.add('disabled');
-                    btnText.innerText = 'در حال انتظار برای شما...';
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const data = urlParams.get('data');
+    let isUnlocked = false;
+    let clickTime = 0;
 
-                    window.addEventListener('focus', function unlockProcess() {
-                        if(!isUnlocked) {
-                            let timeAway = Date.now() - clickTime;
-                            
-                            // اگر کاربر خیلی سریع برگشت (کمتر از 4 ثانیه)
-                            if(timeAway < 4000) {
-                                errorMsg.style.opacity = '1'; // نمایش خطا
-                                btn.classList.remove('disabled');
-                                btnText.innerText = 'تلاش مجدد (فالو کردن)';
-                                window.removeEventListener('focus', unlockProcess);
-                                return;
-                            }
+    if (data) {
+        try {
+            const decoded = atob(data);
+            const links = decoded.split("|||");
 
-                            // اگر زمان معقولی طول کشید، حالت بررسی جعلی (Loading) رو نشون میدیم
-                            window.removeEventListener('focus', unlockProcess);
-                            btnText.innerText = 'در حال بررسی وضعیت...';
-                            btnSpinner.style.display = 'block';
-                            btn.removeAttribute('href'); // موقتا لینک رو برمیداریم تا دوباره کلیک نکنه
-                            
-                            // بعد از 3 ثانیه لودینگ، قفل باز میشه
-                            setTimeout(() => {
-                                isUnlocked = true;
-                                card.classList.add('unlocked');
-                                btnSpinner.style.display = 'none';
-                                
-                                statusTitle.innerText = 'قفل باز شد!';
-                                statusDesc.innerText = 'ممنون از همراهی شما. حالا می‌توانید فایل را دریافت کنید.';
-                                
-                                // تغییر آیکون به قفل باز
-                                statusIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224 64c-44.2 0-80 35.8-80 80v48H384c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80V144C80 64.5 144.5 0 224 0c70.5 0 129 50.8 141.6 118.7c2.9 15.6-7.5 30.6-23.1 33.5s-30.6-7.5-33.5-23.1C301.9 83.1 266.3 64 224 64z"/></svg>';
-                                
-                                btn.classList.remove('disabled');
-                                btn.classList.add('unlocked-btn');
-                                btnText.innerText = 'دانلود فایل';
-                                btn.href = links[1]; // تبدیل دکمه به لینک دانلود
-                                btn.setAttribute('target', '_blank');
-                                
-                            }, 3000); // 3 ثانیه مکث برای لودینگ
-                        }
-                    });
+            const btn        = document.getElementById('actionBtn');
+            const btnText    = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const errorMsg   = document.getElementById('error-msg');
+            const card       = document.getElementById('mainBox');
+            const statusTitle = document.getElementById('statusTitle');
+            const statusDesc  = document.getElementById('statusDesc');
+            const iconSvg     = document.getElementById('iconSvg');
+
+            btn.href = links[0];
+
+            btn.addEventListener('click', function () {
+                if (isUnlocked) return;
+
+                clickTime = Date.now();
+                errorMsg.style.opacity = '0';
+
+                btn.classList.add('loading');
+                btnText.innerText = 'در حال انتظار...';
+
+                window.addEventListener('focus', function unlockProcess() {
+                    if (isUnlocked) return;
+
+                    const timeAway = Date.now() - clickTime;
+
+                    if (timeAway < 4000) {
+                        errorMsg.style.opacity = '1';
+                        btn.classList.remove('loading');
+                        btnText.innerText = 'تلاش مجدد';
+                        window.removeEventListener('focus', unlockProcess);
+                        return;
+                    }
+
+                    window.removeEventListener('focus', unlockProcess);
+                    btnText.innerText = 'در حال بررسی...';
+                    btnSpinner.style.display = 'block';
+                    btn.removeAttribute('href');
+
+                    setTimeout(() => {
+                        isUnlocked = true;
+                        card.classList.add('unlocked');
+                        btnSpinner.style.display = 'none';
+                        btn.classList.remove('loading');
+
+                        statusTitle.innerText = 'قفل باز شد!';
+                        statusDesc.innerText = 'ممنون از همراهی‌ات. فایل آماده‌ی دریافت است.';
+
+                        iconSvg.innerHTML = '<path d="M224 64c-44.2 0-80 35.8-80 80v48H384c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80V144C80 64.5 144.5 0 224 0c70.5 0 129 50.8 141.6 118.7c2.9 15.6-7.5 30.6-23.1 33.5s-30.6-7.5-33.5-23.1C301.9 83.1 266.3 64 224 64z"/>';
+
+                        btn.classList.add('success');
+                        btnText.innerText = 'دانلود فایل';
+                        btn.href = links[1];
+                        btn.setAttribute('target', '_blank');
+
+                    }, 3000);
                 });
-            } catch(e) {
-                document.getElementById('mainBox').style.display = 'none';
-                document.getElementById('fatal-error').style.display = 'block';
-            }
-        } else {
+            });
+
+        } catch (e) {
             document.getElementById('mainBox').style.display = 'none';
             document.getElementById('fatal-error').style.display = 'block';
         }
-    </script>
+    } else {
+        document.getElementById('mainBox').style.display = 'none';
+        document.getElementById('fatal-error').style.display = 'block';
+    }
+</script>
 </body>
 </html>
